@@ -37,4 +37,10 @@ public class TaskController {
 
     }
 
+    @RequestMapping(method = RequestMethod.GET, value = "getTaskContent")
+    public String getTaskContent(Long taskId){
+
+        return new TaskDto(1L,"TITLE","CONTENT").getContent();
+    }
+
 }
