@@ -7,9 +7,10 @@ import org.springframework.stereotype.Component;
 
 import javax.persistence.*;
 
-@Getter
+
 @AllArgsConstructor
 @NoArgsConstructor
+@Getter
 @Entity(name = "tasks")
 public class Task {
 

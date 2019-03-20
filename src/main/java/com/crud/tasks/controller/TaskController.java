@@ -16,19 +16,19 @@ import java.util.List;
 public class TaskController {
 
     @Autowired
-    private DbService dbService;
+    private DbService service;
 
     @Autowired
     private TaskMapper taskMapper;
 
     @RequestMapping(method = RequestMethod.GET,value = "getTasks")
     public List<TaskDto> getTasks(){
-        return new ArrayList<>();
+        return taskMapper.mapToTaskDtoList(service.getAllTasks());
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "getTask")
     public TaskDto getTask(Long id){
-        return new TaskDto(1L,"test title","test_content");
+        return taskMapper.mapToTaskDto(service.getTaskById(id));
     }
 
     @RequestMapping(method = RequestMethod.DELETE, value = "deleteTask")
@@ -45,6 +45,8 @@ public class TaskController {
     public void createTask(TaskDto taskDto){
 
     }
+
+
 
 
 }
