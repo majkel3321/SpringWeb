@@ -17,9 +17,11 @@ public class TrelloController {
     private TrelloClient trelloClient;
 
     @GetMapping(value = "getTrelloBoards")
-    public void getTrelloBoards() {
+    public List<TrelloBoardDto> getTrelloBoards() {
 
-        List<TrelloBoardDto> trelloBoards = trelloClient.getTrelloBoards();
+        return trelloClient.getTrelloBoards();
+
+      /*  List<TrelloBoardDto> trelloBoards = trelloClient.getTrelloBoards();
 
         trelloBoards.stream()
                 .filter(trelloBoardDto -> trelloBoardDto.getId() != null)
@@ -30,7 +32,7 @@ public class TrelloController {
                     System.out.println("This board contains lists: ");
                     trelloBoardDto.getList().forEach(trelloList ->
                             System.out.println(trelloList.getName() + " - " + trelloList.getId() + " - " + trelloList.isClosed()));
-                });
+                });*/
 
     }
 
