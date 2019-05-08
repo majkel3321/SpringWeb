@@ -11,6 +11,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/v1/trello")
+@CrossOrigin("*")
 public class TrelloController {
 
     @Autowired
@@ -20,24 +21,10 @@ public class TrelloController {
     public List<TrelloBoardDto> getTrelloBoards() {
 
         return trelloClient.getTrelloBoards();
-
-      /*  List<TrelloBoardDto> trelloBoards = trelloClient.getTrelloBoards();
-
-        trelloBoards.stream()
-                .filter(trelloBoardDto -> trelloBoardDto.getId() != null)
-                .filter(trelloBoardDto -> trelloBoardDto.getName() != null)
-                .filter(trelloBoardDto -> trelloBoardDto.getName().contains("Kodilla"))
-                .forEach(trelloBoardDto -> {
-                    System.out.println(trelloBoardDto.getName() + " - " + trelloBoardDto.getId());
-                    System.out.println("This board contains lists: ");
-                    trelloBoardDto.getList().forEach(trelloList ->
-                            System.out.println(trelloList.getName() + " - " + trelloList.getId() + " - " + trelloList.isClosed()));
-                });*/
-
     }
 
     @PostMapping(value = "createTrelloCard")
-    public CreatedTrelloCard createTrelloCard(@RequestBody TrelloCardDto trelloCardDto){
+    public CreatedTrelloCard createTrelloCard(@RequestBody TrelloCardDto trelloCardDto) {
 
         return trelloClient.createNewCard(trelloCardDto);
     }
