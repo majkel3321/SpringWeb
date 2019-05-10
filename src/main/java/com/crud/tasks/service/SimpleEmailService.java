@@ -9,10 +9,13 @@ import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 public class SimpleEmailService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(SimpleMailMessage.class);
+
     @Autowired
     private JavaMailSender javaMailSender;
 
@@ -33,10 +36,6 @@ public class SimpleEmailService {
         mailMessage.setTo(mail.getMailTo());
         mailMessage.setSubject(mail.getSubject());
         mailMessage.setText(mail.getMessage());
-        if (!(mail.getToCc().isEmpty())){
-            mailMessage.setCc(mail.getToCc());
-            LOGGER.info("Setting CC...");
-        }
         return mailMessage;
     }
 }
