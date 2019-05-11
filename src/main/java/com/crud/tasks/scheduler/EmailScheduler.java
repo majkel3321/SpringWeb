@@ -22,23 +22,16 @@ public class EmailScheduler {
 
     private static String SUBJECT = "Tasks: Once a day email";
 
-    @Scheduled(cron = "0 0 10 * * *")
+    //@Scheduled(cron = "0 0 10 * * *")
+    @Scheduled(cron = "*/10 * * * * *")
     public void sendInformationEmail(){
         long size = taskRepository.count();
 
-        if (size == 1) {
-            simpleEmailService.send(new Mail(
-                    adminConfig.getAdminMail(),
-                    SUBJECT,
-                    "Currently in database you got: " + size + " task"
-            ));
-        }
-        else{
-            simpleEmailService.send(new Mail(
-                    adminConfig.getAdminMail(),
-                    SUBJECT,
-                    "Currently in database you got: " + size + " tasks"
-            ));
-        }
+        simpleEmailService.send(new Mail(
+                adminConfig.getAdminMail(),
+                SUBJECT,
+                "Currently in database you got: " + size + (size == 1 ? " task" : " tasks")
+        ));
+
     }
 }

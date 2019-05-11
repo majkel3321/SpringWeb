@@ -39,4 +39,21 @@ public class SimpleEmailServiceTest {
         //Then
         verify(javaMailSender,times(1)).send(simpleMailMessage);
     }
+
+    @Test
+    public void shouldSetCc(){
+        Mail mail = new Mail("test@test.com","Test","TestMassage","test2@test");
+
+        SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
+        simpleMailMessage.setTo(mail.getMailTo());
+        simpleMailMessage.setSubject(mail.getSubject());
+        simpleMailMessage.setText(mail.getMessage());
+        simpleMailMessage.setCc(mail.getToCc());
+
+        simpleEmailService.send(mail);
+
+        verify(javaMailSender,times(1)).send(simpleMailMessage);
+
+
+    }
 }
