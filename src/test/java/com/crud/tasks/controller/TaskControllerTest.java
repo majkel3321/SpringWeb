@@ -51,6 +51,7 @@ public class TaskControllerTest {
                 .andExpect(jsonPath("$.id", is(1)))
                 .andExpect(jsonPath("$.title", is("Task1")))
                 .andExpect(jsonPath("$.content", is("Task1 content")));
+
     }
 
     @Test
