@@ -18,9 +18,10 @@ import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyLong;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -45,7 +46,8 @@ public class TaskControllerTest {
         }
 
         //When&Then
-        mockMvc.perform(get("/v1/task/getTask?taskId=1")
+        mockMvc.perform(get("/v1/task/getTask")
+                .param("taskId", "1")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id", is(1)))
@@ -93,5 +95,52 @@ public class TaskControllerTest {
                 .andExpect(jsonPath("$.id", is(1)))
                 .andExpect(jsonPath("$.title", is("Task1")))
                 .andExpect(jsonPath("$.content", is("Task1 content")));
+    }
+
+    @Test
+    public void testCreateTask() throws Exception {
+        //Given
+        TaskDto taskDto1 = new TaskDto(1L, "Task1", "Task1 content");
+        TaskDto taskDto2 = new TaskDto(2L, "Task2", "Task2 content");
+        TaskDto taskDto3 = new TaskDto(3L, "Task3", "Task3 content");
+
+        Gson gson = new Gson();
+        List<String> taskDtoJsons = new ArrayList<>();
+        taskDtoJsons.add(gson.toJson(taskDto1));
+        taskDtoJsons.add(gson.toJson(taskDto2));
+        taskDtoJsons.add(gson.toJson(taskDto3));
+
+        //When&Then
+        for (String task : taskDtoJsons) {
+            mockMvc.perform(post("/v1/task/createTask")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .characterEncoding("UTF-8")
+                    .content(task))
+                    .andExpect(status().isOk());
+        }
+
+        verify(taskController, times(3)).createTask(any(TaskDto.class));
+    }
+
+    @Test
+    public void testDeleteTask() throws Exception {
+        //Given
+        TaskDto taskDto1 = new TaskDto(1L, "Task1", "Task1 content");
+        Gson gson = new Gson();
+        String taskDto1Json = gson.toJson(taskDto1);
+
+        mockMvc.perform(post("/v1/task/createTask")
+                .contentType(MediaType.APPLICATION_JSON)
+                .characterEncoding("UTF-8")
+                .content(taskDto1Json))
+                .andExpect(status().isOk());
+
+        mockMvc.perform(delete("/v1/task/deleteTask")
+                .param("taskId", "1")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
+
+
+        verify(taskController, times(1)).deleteTask(anyLong());
     }
 }
